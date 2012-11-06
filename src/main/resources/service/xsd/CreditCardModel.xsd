@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mule-credit.com/CreditCard/model" xmlns:tns="http://www.mule-credit.com/CreditCard/model" elementFormDefault="unqualified">
+	<element name="amount" type="float" />
+	<element name="ccNumber" type="string" />
+	<element name="expirationDate" type="date" />
+	<element name="securityCode" type="string" />
+	<element name="authorisationNumber" type="string" />
+	<element name="cancelationNumber" type="string" />
+</schema>

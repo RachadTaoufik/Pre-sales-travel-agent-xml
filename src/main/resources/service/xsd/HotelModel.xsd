@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mule-hotel.com/Hotel/model" xmlns:tns="http://www.mule-hotel.com/Hotel/model" elementFormDefault="unqualified">
+	<element name="room" >
+		<complexType>
+			<sequence>
+				<element name="id" type="string" />
+				<element name="roomType">
+					<simpleType>
+						<restriction base="string">
+							<enumeration value="Single" />
+							<enumeration value="Double" />
+							<enumeration value="Presidential" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="price" type="float" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="startDate" type="date" />
+	<element name="numberOfNights" type="integer" />
+	<element name="travelAgentId" type="string" />
+	<element name="city" type="string" />
+	<element name="roomId" type="string" />
+	<element name="confirmationNumber" type="string" />
+</schema>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.mule-travel.com/TravelAgent/" targetNamespace="http://www.mule-travel.com/TravelAgent/">
+	<xs:element name="TravelRequest" type="tns:requestType" />
+	
+	<xs:complexType name="requestType">
+		<xs:sequence>
+			<xs:element name="beginDate" type="xs:date" />
+			<xs:element name="nights" type="xs:integer" />
+			<xs:element name="roomPreference" type="xs:string" />
+			<xs:element name="fromCity" type="xs:string" />
+			<xs:element name="toCity" type="xs:string" />
+			<xs:element name="userId" type="xs:string"/>
+		</xs:sequence> 
+	</xs:complexType>
+	
+	<xs:simpleType name="roomType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Single" />
+			<xs:enumeration value="Double" />
+			<xs:enumeration value="Presidential" />
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

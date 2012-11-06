@@ -1,0 +1,182 @@
+<html>
+<head>
+<link href="css/south-street/jquery-ui-1.8.20.custom.css"
+	rel="stylesheet" type="text/css" />
+<link href="css/estore.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
+<script type="text/javascript" src="mule-resource/js/mule.js"></script>
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						function isNumber(n) {
+							return !isNaN(parseFloat(n)) && isFinite(n);
+						}
+						
+						/*$.ajax({
+							url : "http://localhost:8091/populate"
+						});*/
+						
+						tabs = $("#tabs").tabs({
+							selected : 0
+						});
+						$('.button').button();
+						$('.datepicker').datepicker({dateFormat : "yy-mm-dd" });
+						$('#submitButton')
+								.click(
+										function() {
+											$('#orderSummaryTable tbody tr')
+											.remove();
+											var travelRequest = {
+												beginDate : $('#beginDate').val(),
+												nights : $('#nights').val(),
+												roomPreference : $('#roomPreference').val(),
+												fromCity : $('#fromCity').val(),
+												toCity : $('#toCity').val(),
+												userId : '1'
+											}
+											var request = JSON.stringify(travelRequest);
+											mule.rpc("/travelAgent/request",
+													request, travelResponse);
+										});
+						$('#resetButton').click(function() {
+							$('#form input').val('');
+							$('#orderSummaryTable tbody tr').remove();
+						});
+						function travelResponse(message, error) {
+							if (error == null) {
+							    confirmation = JSON.parse(message.data);
+							    if (confirmation.error == null) {
+    								$('#orderSummaryTable tbody')
+    											.append('<tr><td>'
+    															+ confirmation.confirmationNumber
+    															+ '</td><td>'
+    															+ confirmation.totalPrice);
+    								tabs.tabs('enable', 1);
+    								tabs.tabs('select', 1);
+							    } else {
+							      alert(confirmation.error);
+							    }
+							} else {
+								alert(error.data);
+							}
+						}
+						$("#soapSubmitButton").click(
+								function() {
+									mule.rpc('/travelAgent/soap', $("#soapRequest")
+											.val(), function(data) {
+										$('#soapResponse').val(data.data);
+									});
+								});
+						
+
+					});
+</script>
+</head>
+<body>
+
+<h1>Mule Travel Agent</h1>
+<div id="tabs">
+<ul>
+	<li><a href="#form"><span>Form</span></a></li>
+	<li><a href="#confirmation"><span>Confirmation</span></a></li>
+	<li><a href="#soap"><span>Soap</span></a></li>
+</ul>
+<div id="form" style="padding: 1em;">
+<p>Travel Details</p>
+<table width='40%' class='payment'>
+	<tr>
+		<td class="title">Begin Date</td>
+		<td class="field"><input size="10" maxlength="16" name="beginDate"
+			id="beginDate" type="text" class="datepicker" /></td>
+	</tr>
+	<tr>
+		<td class="title">Nights:</td>
+		<td class="field"><select id="nights">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td class="title">Room Preference:</td>
+		<td class="field"><select id="roomPreference">
+			<option value="Single">Single</option>
+			<option value="Double">Double</option>
+			<option value="Presedential">Presedential</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td class="title">From:</td>
+		<td class="field"><select id="fromCity">
+			<option value="DUB">Dublin</option>
+			<option value="ROM">Rome</option>
+			<option value="BUE">Buenos Aires</option>
+			<option value="LON">London</option>
+			<option value="SFO">San Francisco</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td class="title">To:</td>
+		<td class="field"><select id="toCity">
+			<option value="DUB">Dublin</option>
+			<option value="ROM">Rome</option>
+			<option value="BUE">Buenos Aires</option>
+			<option value="LON">London</option>
+			<option value="SFO">San Francisco</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td class="title">User Id:</td><td>1</td>
+	</tr>
+</table>
+<a id="submitButton" class="button" style="float: right;">Submit
+&gt;&gt;</a> <a id="resetButton" class="button" style="float: right :">Reset</a>
+</div>
+<div id="confirmation">
+<p>Order Summary</p>
+<table style="text-align: left; width: 50%;" id="orderSummaryTable">
+	<thead>
+		<tr>
+			<th>Confirmation Number</th>
+			<th>Total Price</th>
+		</tr>
+	</thead>
+	<tbody>
+		<!-- Order summary rows will be inserted here -->
+	</tbody>
+</table>
+</div>
+<div id="soap">
+<div id="response" style="float: right; width: 50%;">
+<h2>Response</h2>
+<textarea id="soapResponse" style="width: 100%; height: 300px;" >
+</textarea>
+</div>
+<div id="request" style="width: 50%;">
+<h2>Request</h2>
+<textarea id="soapRequest" style="width: 100%; height: 300px;">
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mes="http://www.mule-travel.com/TravelAgent/message" xmlns:mod="http://www.mule-travel.com/TravelAgent/model">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <mes:bookTrip>
+         <mod:beginDate>2012-01-01</mod:beginDate>
+         <mod:nights>10000</mod:nights>
+         <mod:roomPreference>Double</mod:roomPreference>
+         <mod:fromCity>BUE</mod:fromCity>
+         <mod:toCity>MAD</mod:toCity>
+         <mod:userId>1</mod:userId>
+      </mes:bookTrip>
+   </soapenv:Body>
+</soapenv:Envelope>
+</textarea> 
+<a id="soapSubmitButton" class="button">Submit &gt;&gt;</a>
+</div>
+</div>
+
+</div>
+
+</body>
+</html>

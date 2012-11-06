@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:mod="http://www.mule-credit.com/CreditCard/model" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mule-credit.com/CreditCard/message" elementFormDefault="unqualified">
+	<import namespace="http://www.mule-credit.com/CreditCard/model" schemaLocation="CreditCardModel.xsd" />
+	<element name="authorisePayment">
+		<complexType>
+			<sequence>
+				<element ref="mod:amount" />
+				<element ref="mod:ccNumber" />
+				<element ref="mod:expirationDate" />
+				<element ref="mod:securityCode" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="authorisePaymentResponse">
+		<complexType>
+			<sequence>
+				<element ref="mod:authorisationNumber" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="cancelPayment">
+		<complexType>
+			<sequence>
+				<element ref="mod:authorisationNumber" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="cancelPaymentResponse">
+		<complexType>
+			<sequence>
+				<element ref="mod:cancelationNumber" />
+			</sequence>
+		</complexType>
+	</element>
+</schema>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:mes="http://www.mule-air.com/Airline/message" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Airline" targetNamespace="http://www.mule-air.com/Airline/service">
+  <wsdl:types>
+    <xsd:import namespace="http://www.mule-air.com/Airline/message" schemaLocation="xsd/AirlineMessage.xsd" />
+  </wsdl:types>
+  <wsdl:message name="reserveFlight">
+    <wsdl:part element="mes:reserveFlight" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="reserveFlightResponse">
+    <wsdl:part element="mes:reserveFlightResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="confirmFlightRequest">
+    <wsdl:part element="mes:confirmFlight" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="confirmFlightResponse">
+    <wsdl:part element="mes:confirmFlightResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="cancelFlightRequest">
+    <wsdl:part element="mes:cancelFlight" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="cancelFlightResponse">
+    <wsdl:part element="mes:cancelFlightResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="AirlineService">
+    <wsdl:operation name="reserveFlight">
+      <wsdl:input message="tns:reserveFlight"/>
+      <wsdl:output message="tns:reserveFlightResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="confirmFlight">
+      <wsdl:input message="tns:confirmFlight"/>
+      <wsdl:output message="tns:confirmFlightResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="cancelFlight">
+      <wsdl:input message="tns:cancelFlight"/>
+      <wsdl:output message="tns:cancelFlightResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AirlineSOAP" type="air:AirlineService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="reserveFlight">
+      <soap:operation soapAction="http://www.mule-air.com/Airline/reserveFlight"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="confirmFlight">
+      <soap:operation soapAction="http://www.mule-air.com/Airline/confirmFlight"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+     <wsdl:operation name="cancelFlight">
+      <soap:operation soapAction="http://www.mule-air.com/Airline/cancelFlight"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AirlineService">
+    <wsdl:port binding="tns:AirlineSOAP" name="AirlineSOAP">
+      <soap:address location="http://www.mule-air.com"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

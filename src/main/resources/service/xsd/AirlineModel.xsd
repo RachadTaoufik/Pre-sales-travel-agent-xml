@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mule-air.com/Airline/model" xmlns:tns="http://www.example.org/Airline/model" elementFormDefault="unqualified">
+	<xsd:element name="seatCount" type="xsd:integer" />
+	<xsd:element name="travelDate" type="xsd:date" />
+	<xsd:element name="returnDate" type="xsd:date" />
+	<xsd:element name="reservationNumber" type="xsd:string" />
+	<xsd:element name="expiryDate" type="xsd:date" />
+	<xsd:element name="creditCardAuthorisationNumber" type="xsd:string" />
+	<xsd:element name="confirmationNumber" type="xsd:string" />
+	<xsd:element name="cancelationNumber" type="xsd:string" />
+	<xsd:element name="price" type="xsd:float" />
+</xsd:schema>

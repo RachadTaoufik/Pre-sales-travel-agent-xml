@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.4.0"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd 
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd 
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd 
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd 
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+	<spring:beans>
+		<spring:bean id="Derby_Data_Source" class="org.enhydra.jdbc.standard.StandardXADataSource" destroy-method="shutdown">
+			<spring:property name="driverName" value="org.apache.derby.jdbc.EmbeddedDriver" />
+			<spring:property name="url" value="jdbc:derby:muleEmbeddedDB;create=true" />
+		</spring:bean>
+		<spring:bean id="property-placeholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<spring:property name="location" value="classpath:config.${env}.properties" />
+		</spring:bean>
+
+	</spring:beans>
+	<jdbc-ee:connector name="JDBCConnector" dataSource-ref="Derby_Data_Source" validateConnections="true" queryTimeout="-1" pollingFrequency="0" doc:name="Database" />
+
+	<data-mapper:config name="cancelFlight_to_cancelFlightResponse" transformationGraphPath="cancelflight_to_cancelflightresponse.grf" doc:name="DataMapper" />
+	<data-mapper:config name="confirmFlight_to_confirmFlightResponse" transformationGraphPath="confirmflight_to_confirmflightresponse.grf" doc:name="DataMapper" />
+	<data-mapper:config name="confirmRoom_to_confirmRoomResponse" transformationGraphPath="confirmroom_to_confirmroomresponse.grf" doc:name="DataMapper" />
+	<data-mapper:config name="getAvailableRooms_to_getAvailableRoomsResponse" transformationGraphPath="getavailablerooms_to_getavailableroomsresponse.grf" doc:name="DataMapper" />
+	<data-mapper:config name="reserveFlight_to_reserveFlightResponse" transformationGraphPath="reserveflight_to_reserveflightresponse.grf" doc:name="DataMapper" />
+	<data-mapper:config name="authorisePayment_to_authorisePaymentResponse" transformationGraphPath="authorisepayment_to_authorisepaymentresponse.grf" doc:name="DataMapper" />
+	<data-mapper:config name="cancelPayment_to_cancelPaymentResponse" transformationGraphPath="cancelpayment_to_cancelpaymentresponse.grf" doc:name="DataMapper" />
+	<flow name="mockAirline" doc:name="mockAirline">
+		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="${http.port}" path="AirlineService" doc:name=":${http.port}/AirlineService"></http:inbound-endpoint>
+		<cxf:proxy-service port="AirlineSOAP" doc:name="Proxy service" namespace="http://www.mule-air.com/service" payload="body" service="AirlineService"></cxf:proxy-service>
+		<mulexml:dom-to-xml-transformer returnClass="java.lang.String" />
+		<set-variable variableName="operation" value="#[xpath:fn:local-name(/*)]" doc:name="operation" />
+		<choice doc:name="Choice">
+			<when expression="flowVars.operation == 'reserveFlight'">
+				<processor-chain>
+					<data-mapper:transform config-ref="reserveFlight_to_reserveFlightResponse" doc:name="&amp;lt;reserveFlight /&amp;gt; to &amp;lt;reserveFlightResponse /&amp;gt;" />
+				</processor-chain>
+			</when>
+			<when expression="flowVars.operation == 'confirmFlight'">
+				<processor-chain>
+					<data-mapper:transform config-ref="confirmFlight_to_confirmFlightResponse" doc:name="&amp;lt;confirmFlight /&amp;gt; to &amp;lt;confirmFlightResponse /&amp;gt;" />
+				</processor-chain>
+			</when>
+			<otherwise>
+				<processor-chain>
+					<data-mapper:transform config-ref="cancelFlight_to_cancelFlightResponse" doc:name="&amp;lt;cancelFlight /&amp;gt; to &amp;lt;cancelFlightResponse /&amp;gt;" />
+				</processor-chain>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="mockHotel" doc:name="mockHotel">
+		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="${http.port}" path="HotelService" doc:name=":${http.port}/HotelService"></http:inbound-endpoint>
+		<cxf:proxy-service doc:name="Proxy service" namespace="http://www.mule-hotel.com/Hotel/service" payload="body" port="HotelServiceSOAP" service="HotelService" wsdlLocation="service/HotelService.wsdl"></cxf:proxy-service>
+		<mulexml:dom-to-xml-transformer returnClass="java.lang.String" />
+		<set-variable variableName="operation" value="#[xpath:fn:local-name(/*)]" doc:name="operation" />
+		<choice doc:name="Choice">
+			<when expression="#[flowVars.operation == 'confirmRoom']">
+				<processor-chain>
+					<data-mapper:transform config-ref="confirmRoom_to_confirmRoomResponse" doc:name="&amp;lt;confirmRoom /&amp;gt; to &amp;lt;confirmRoomResponse /&amp;gt;" />
+				</processor-chain>
+			</when>
+			<otherwise>
+				<processor-chain>
+					<data-mapper:transform config-ref="getAvailableRooms_to_getAvailableRoomsResponse" doc:name="&amp;lt;getAvailableRooms /&amp;gt; to &amp;lt;getAvailableRoomsResponse /&amp;gt;" >
+                        <data-mapper:input-arguments>
+                            <data-mapper:input-argument key="roomPreference">#[sessionVars.roomPreference]</data-mapper:input-argument>
+                        </data-mapper:input-arguments>
+                    </data-mapper:transform>
+				</processor-chain>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="mockCreditCard" doc:name="mockCreditCard">
+		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="${http.port}" path="CreditCardService" doc:name=":${http.port}/CreditCardService"></http:inbound-endpoint>
+		<cxf:proxy-service doc:name="Proxy service" namespace="http://www.mule-credit.com/CreditCard/service" payload="body" port="CreditCardServiceSOAP" service="CreditCardService"></cxf:proxy-service>
+		<mulexml:dom-to-xml-transformer returnClass="java.lang.String" />
+		<set-variable variableName="operation" value="#[xpath:fn:local-name(/*)]" doc:name="operation" />
+		<choice doc:name="Choice">
+			<when expression="#[flowVars.operation == 'authorisePayment']">
+				<processor-chain>
+					<data-mapper:transform config-ref="authorisePayment_to_authorisePaymentResponse" doc:name="&amp;lt;authorisePayment /&amp;gt; to &amp;lt;authorisePaymentResponse /&amp;gt;" />
+				</processor-chain>
+			</when>
+			<otherwise>
+				<processor-chain>
+					<data-mapper:transform config-ref="cancelPayment_to_cancelPaymentResponse" doc:name="&amp;lt;cancelPayment /&amp;gt; to &amp;lt;cancelPaymentResponse /&amp;gt;" />
+				</processor-chain>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="commissionService" doc:name="commissionService">
+		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="${http.port}" path="commissions" doc:name=":${http.port}/commissions" />
+		<choice doc:name="Choice">
+			<when expression="#[ diffDays(message.inboundProperties['http.query.params']['date']) &lt; 30]">
+				<processor-chain>
+					<set-payload value="0.2" doc:name="0.2" />
+				</processor-chain>
+			</when>
+			<otherwise>
+				<processor-chain>
+					<set-payload value="0.1" doc:name="0.1" />
+				</processor-chain>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="databaseInitialisation" doc:name="databaseInitialisation">
+		<http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="${http.port}" path="init-db" doc:name=":${http.port}/init-db" />
+		<scripting:component doc:name="Initialise Database">
+			<scripting:script engine="Groovy">
+                <scripting:text><![CDATA[jdbcConnector = muleContext.getRegistry().lookupConnector("JDBCConnector");
+qr = jdbcConnector.getQueryRunner();
+conn = jdbcConnector.getConnection();
+qr.update(conn, "CREATE TABLE credit_cards (i int generated always as identity, user_id varchar(256), cc_number varchar(256), expiration_date date, security_code varchar(256))");
+
+qr.update(conn, "insert into credit_cards (user_id, cc_number, expiration_date, security_code) values('1','1234567890123456',date('2015-01-01'),'123')");
+qr.update(conn, "insert into credit_cards (user_id, cc_number, expiration_date, security_code) values('2','1234567890123456',date('2015-01-01'),'123')");
+qr.update(conn, "insert into credit_cards (user_id, cc_number, expiration_date, security_code) values('3','1234567890123456',date('2015-01-01'),'123')");
+return "db populated";]]></scripting:text>
+			</scripting:script>
+		</scripting:component>
+		<catch-exception-strategy doc:name="Catch Exception Strategy">
+			<expression-transformer expression="table already populated" doc:name="&quot;table already populated&quot;" />
+		</catch-exception-strategy>
+	</flow>
+
+</mule>

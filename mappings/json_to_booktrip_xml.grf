@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph author="nialdarbey" created="Tue Oct 23 09:26:21 GMT-03:00 2012" guiVersion="3.3.0.M2" id="1351419871898" licenseCode="Unlicensed" licenseType="Commercial" modified="Tue Oct 23 09:26:21 GMT-03:00 2012" modifiedBy="nialdarbey" name="Json to bookTrip Xml" preview-file="${Project_Home}/src/test/resources/sample-request.json" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __sourcePath="{http://www.mule-travel.com/TravelAgent/message=ns0}/ns0:bookTrip" _dataStructure="OBJECT" _id="__id" _type="Output" id="Metadata1">
+<Record fieldDelimiter="|" name="bookTripType" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{http://www.mule-travel.com/TravelAgent/model=ns1,http://www.mule-travel.com/TravelAgent/message=ns0}/ns0:bookTrip/ns1:beginDate" label="ns1:beginDate" name="ns1_beginDate" type="date"/>
+<Field __sourcePath="{http://www.mule-travel.com/TravelAgent/model=ns1,http://www.mule-travel.com/TravelAgent/message=ns0}/ns0:bookTrip/ns1:nights" label="ns1:nights" name="ns1_nights" type="integer"/>
+<Field __sourcePath="{http://www.mule-travel.com/TravelAgent/model=ns1,http://www.mule-travel.com/TravelAgent/message=ns0}/ns0:bookTrip/ns1:roomPreference" label="ns1:roomPreference" name="ns1_roomPreference" type="string"/>
+<Field __sourcePath="{http://www.mule-travel.com/TravelAgent/model=ns1,http://www.mule-travel.com/TravelAgent/message=ns0}/ns0:bookTrip/ns1:fromCity" label="ns1:fromCity" name="ns1_fromCity" type="string"/>
+<Field __sourcePath="{http://www.mule-travel.com/TravelAgent/model=ns1,http://www.mule-travel.com/TravelAgent/message=ns0}/ns0:bookTrip/ns1:toCity" label="ns1:toCity" name="ns1_toCity" type="string"/>
+<Field __sourcePath="{http://www.mule-travel.com/TravelAgent/model=ns1,http://www.mule-travel.com/TravelAgent/message=ns0}/ns0:bookTrip/ns1:userId" label="ns1:userId" name="ns1_userId" type="string"/>
+</Record>
+</Metadata>
+<Metadata __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Input" id="Metadata0">
+<Record fieldDelimiter="|" name="object" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" label="__id" name="__id" type="string"/>
+<Field __sourcePath="{}/object/beginDate" label="beginDate" name="beginDate" type="string"/>
+<Field __sourcePath="{}/object/nights" label="nights" name="nights" type="string"/>
+<Field __sourcePath="{}/object/roomPreference" label="roomPreference" name="roomPreference" type="string"/>
+<Field __sourcePath="{}/object/fromCity" label="fromCity" name="fromCity" type="string"/>
+<Field __sourcePath="{}/object/toCity" label="toCity" name="toCity" type="string"/>
+<Field __sourcePath="{}/object/userId" label="userId" name="userId" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:outputPayload" guiHeight="0" guiName="XML WRITER" guiWidth="0" guiX="900" guiY="20" id="EXT_XML_WRITER0" type="EXT_XML_WRITER" xmlSchemaURL="./src/main/resources/service/xsd/TravelAgentMessage.xsd">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<ns0:bookTrip xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" xmlns:ns0="http://www.mule-travel.com/TravelAgent/message" clover:inPort="0">
+  <ns1:beginDate xmlns:ns1="http://www.mule-travel.com/TravelAgent/model">$0.ns1_beginDate</ns1:beginDate>
+  <ns1:nights xmlns:ns1="http://www.mule-travel.com/TravelAgent/model">$0.ns1_nights</ns1:nights>
+  <ns1:roomPreference xmlns:ns1="http://www.mule-travel.com/TravelAgent/model">$0.ns1_roomPreference</ns1:roomPreference>
+  <ns1:fromCity xmlns:ns1="http://www.mule-travel.com/TravelAgent/model">$0.ns1_fromCity</ns1:fromCity>
+  <ns1:toCity xmlns:ns1="http://www.mule-travel.com/TravelAgent/model">$0.ns1_toCity</ns1:toCity>
+  <ns1:userId xmlns:ns1="http://www.mule-travel.com/TravelAgent/model">$0.ns1_userId</ns1:userId>
+</ns0:bookTrip>]]></attr>
+<attr name="_data_format"><![CDATA[XML]]></attr>
+</Node>
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:inputPayload" guiHeight="0" guiName="JSON READER" guiWidth="0" guiX="20" guiY="20" id="JSON_READER0" type="JSON_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context xpath="/root">
+  <Context outPort="0" sequenceField="__id" xpath="object">
+    <Mapping cloverField="beginDate" trim="true" xpath="beginDate"/>
+    <Mapping cloverField="nights" trim="true" xpath="nights"/>
+    <Mapping cloverField="roomPreference" trim="true" xpath="roomPreference"/>
+    <Mapping cloverField="fromCity" trim="true" xpath="fromCity"/>
+    <Mapping cloverField="toCity" trim="true" xpath="toCity"/>
+    <Mapping cloverField="userId" trim="true" xpath="userId"/>
+  </Context>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[JSON]]></attr>
+<attr name="jsonSchemaURL"><![CDATA[./src/test/resources/sample-request.json]]></attr>
+</Node>
+<Node enabled="enabled" guiHeight="0" guiName="object_to_ns0:bookTrip" guiWidth="0" guiX="460" guiY="20" id="REFORMAT0" type="REFORMAT">
+<attr name="transform"><![CDATA[//#CTL2
+
+// Transforms input record into output record.
+function integer transform() {
+	$out.0.ns1_userId = $in.0.userId;
+	$out.0.ns1_toCity = $in.0.toCity;
+	$out.0.ns1_fromCity = $in.0.fromCity;
+	$out.0.ns1_roomPreference = $in.0.roomPreference;
+	$out.0.ns1_nights = (isnull($in.0.nights) ? 0 : str2integer($in.0.nights));
+	
+	$out.0.ns1_beginDate = (isnull($in.0.beginDate) ? null : str2date($in.0.beginDate, "yyyy-MM-dd"));
+$out.0.__id=$in.0.__id;
+		return ALL;
+}
+
+// Called during component initialization.
+// function boolean init() {}
+
+// Called during each graph run before the transform is executed. May be used to allocate and initialize resources
+// required by the transform. All resources allocated within this method should be released
+// by the postExecute() method.
+// function void preExecute() {}
+
+// Called only if transform() throws an exception.
+// function integer transformOnError(string errorMessage, string stackTrace) {}
+
+// Called during each graph run after the entire transform was executed. Should be used to free any resources
+// allocated within the preExecute() method.
+// function void postExecute() {}
+
+// Called to return a user-defined error message when an error occurs.
+// function string getMessage() {}
+]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="JSON_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="Metadata0" outPort="Port 0 (out)" toNode="REFORMAT0:0"/>
+<Edge debugMode="true" fromNode="REFORMAT0:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="Metadata1" outPort="Port 0 (out)" toNode="EXT_XML_WRITER0:0"/>
+</Phase>
+</Graph>

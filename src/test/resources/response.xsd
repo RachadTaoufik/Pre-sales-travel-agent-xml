@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mule-travel.com/TravelAgent/">
+<xs:element name="TravelResponse">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="confirmationNumber" type="xs:string"/>
+      <xs:element name="totalPrice" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+</xs:schema>
+

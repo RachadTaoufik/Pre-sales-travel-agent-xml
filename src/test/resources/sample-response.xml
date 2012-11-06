@@ -1,0 +1,4 @@
+<ns2:TravelResponse xmlns:ns2="http://www.mule-travel.com/TravelAgent/">
+	<confirmationNumber>1234</confirmationNumber>
+	<totalPrice>684.0</totalPrice>
+</ns2:TravelResponse>

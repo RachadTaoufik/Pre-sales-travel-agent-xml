@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:mod="http://www.mule-air.com/Airline/model" targetNamespace="http://www.mule-air.com/Airline/message" xmlns:tns="http://www.example.org/Airline/message" elementFormDefault="unqualified">
+	<xsd:import namespace="http://www.mule-air.com/Airline/model" schemaLocation="AirlineModel.xsd" />
+	<xsd:element name="reserveFlight">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mod:seatCount" />
+				<xsd:element ref="mod:travelDate" />
+				<xsd:element ref="mod:returnDate" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="reserveFlightResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mod:reservationNumber" />
+				<xsd:element ref="mod:expiryDate" />
+				<xsd:element ref="mod:price" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="confirmFlight">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mod:reservationNumber" />
+				<xsd:element ref="mod:creditCardAuthorisationNumber" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="confirmFlightResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mod:confirmationNumber" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="cancelFlight">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mod:confirmationNumber" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="cancelFlightResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="mod:cancelationNumber" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</schema>

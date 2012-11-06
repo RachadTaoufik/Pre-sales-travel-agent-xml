@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:mod="http://www.mule-hotel.com/Hotel/model" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mule-hotel.com/Hotel/message" xmlns:tns="http://www.mule-hotel.com/Hotel/message" elementFormDefault="unqualified">
+	<import namespace="http://www.mule-hotel.com/Hotel/model" schemaLocation="HotelModel.xsd" />
+	<element name="getAvailableRooms">
+		<complexType>
+			<sequence>
+				<element ref="mod:startDate" />
+				<element ref="mod:numberOfNights" />
+				<element ref="mod:travelAgentId" />
+				<element ref="mod:city" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="getAvailableRoomsResponse">
+		<complexType>
+			<sequence>
+				<element ref="mod:room" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="confirmRoom">
+		<complexType>
+			<sequence>
+				<element ref="mod:roomId" />
+				<element ref="mod:startDate" />
+				<element ref="mod:numberOfNights" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="confirmRoomResponse">
+		<complexType>
+			<sequence>
+				<element ref="mod:confirmationNumber" />
+			</sequence>
+		</complexType>
+	</element>
+</schema>

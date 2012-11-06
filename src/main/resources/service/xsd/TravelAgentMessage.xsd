@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:mod="http://www.mule-travel.com/TravelAgent/model" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mule-travel.com/TravelAgent/message" xmlns:tns="http://www.mule-travel.com/TravelAgent/message" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:import namespace="http://www.mule-travel.com/TravelAgent/model" schemaLocation="TravelAgentModel.xsd" />
+	<xsd:element name="bookTrip" type="tns:bookTripType" />
+	<xsd:element name="bookTripResponse" type="tns:bookTripResponseType" />
+	<xsd:complexType name="bookTripType">
+		<sequence>
+			<element ref="mod:beginDate" />
+			<element ref="mod:nights" />
+			<element ref="mod:roomPreference" />
+			<element ref="mod:fromCity"/>
+			<element ref="mod:toCity" />
+			<element ref="mod:userId" />
+		</sequence>
+	</xsd:complexType>
+	<xsd:complexType name="bookTripResponseType">
+		<xsd:sequence>
+			<xsd:element ref="mod:confirmationNumber" />
+			<xsd:element ref="mod:totalPrice" />
+		</xsd:sequence>
+	</xsd:complexType>
+</schema>

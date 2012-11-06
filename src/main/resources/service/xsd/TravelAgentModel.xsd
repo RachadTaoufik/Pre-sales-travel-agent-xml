@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema elementFormDefault="unqualified" targetNamespace="http://www.mule-travel.com/TravelAgent/model" xmlns:tns="http://www.mule-travel.com/TravelAgent/model" xmlns="http://www.w3.org/2001/XMLSchema">
+	<element name="beginDate" type="date" />
+	<element name="nights" type="integer" />
+	<element name="roomPreference" type="string" />
+	<element name="fromCity" type="string" />
+	<element name="toCity" type="string" />
+	<element name="userId" type="string" />
+	<element name="confirmationNumber" type="string" />
+	<element name="totalPrice" type="float" />
+</schema>

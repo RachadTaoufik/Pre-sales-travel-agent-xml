@@ -1,0 +1,6 @@
+----------------------------------------------------------------
+2012-11-06 11:48:45.940 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.6.1.0 - (938214): instance a816c00e-013a-d58d-1cba-000003202158 
+on database directory /Users/nialdarbey/MuleStudio/workspace/travel_agent_xml/muleEmbeddedDB   with class loader sun.misc.Launcher$AppClassLoader@1d9f953d
+
+Database Class Loader started - derby.database.classpath=''
